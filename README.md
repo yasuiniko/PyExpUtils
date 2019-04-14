@@ -3,6 +3,9 @@
 Short for python experiment utilities.
 This is a collection of scripts and machine learning experiment management tools that I use whenever I have to use python.
 
+## Table of Contents
+- [API Documentation](./wiki/api/api)
+
 ## Structure
 I structure all of my machine learning experiments in the same way.
 This common structure lowers the cognitive cost of switching between projects.
@@ -232,59 +235,3 @@ These are indexed by a single index value.
 To run each permutation once, simply execute indices `i \in [0..8]`.
 To run each permutation twice, multiply by 2: `i \in [0..17]`.
 In general for `n` runs and `p` permutations: `i \in [0..(n*p - 1)]`.
-
-### API
-#### models/ExperimentDescription
-De-serializes the experiment description json files.
-Holds a few utility functions for working with these datafiles.
-
-This should be extended by a subclass that knows the exact fields in your datafile.
-This class makes no strong assumptions about the datafile structure, though defaults to assuming that the meta-parameters are contained in a field called `metaParameters`.
-
-**getPermutation**: gets the parameter permutation for a single index.
-```python
-with open('ann.json', 'r') as f:
-    d = json.load(f)
-exp = ExperimentDescription(d)
-permutation = exp.getPermutation(0)
-# permutation is a raw dictionary exactly the same as `d` above
-# except `metaParameters` has been replaced with single values (instead of sweeps)
-```
-
-**permutations**: gets the number of possible permutations for given datafile.
-```python
-with open('ann.json', 'r') as f:
-    d = json.load(f)
-
-exp = ExperimentDescription(d)
-num_permutations = exp.permutations()
-```
-
-**getRun**: returns the run number for a given index.
-This is based on the number of permutations and the index value.
-```python
-run_num = exp.getRun(idx=22)
-# if there are 10 permutations, this would return run_num=3
-```
-
-**interpolateSavePath**: takes a save path "key" and builds a path based on experiment meta-data.
-```python
-# values in {} will be replaced based on experiment description
-path_key = 'results/{name}/{algorithm}/{dataset}/{params}/{run}'
-save_path = exp.interpolateSavePath(idx=0)
-
-print(save_path) # results/overfit/ann/fashion_mnist/alpha-0.01_epsilon-0.01/0
-```
-
-#### results/paths
-**listResultsPaths**: takes an experiment description and returns an iterable of each result path for each meta-parameter permutation and each run.
-```python
-for path in listResultsPaths(exp, runs = 10):
-    print(path) # results/overfit/ann/fashion_mnist/alpha-0.01_epsilon-0.01/0
-```
-
-**listMissingResults**: takes an experiment description and returns an iterable of all of the missing results. This is extremely useful for running experiments on a cluster where jobs may time out, or nodes may fail due to environmental issues. This allows rerunning of only the failed experiments.
-```python
-for path in listMissingResults(exp, runs=10):
-    print(path) # results/overfit/ann/fashion_mnist/alpha-0.02_epsilon-0.01/8
-```
