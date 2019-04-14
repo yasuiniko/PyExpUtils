@@ -1,7 +1,7 @@
 # API
 
 ## Models
-- [ExperimentDescription](./models/ExperimentDescription)
+- [ExperimentDescription](./models/ExperimentDescription.md)
 
 ## Results
-- [paths](./results/paths)
+- [paths](./results/paths.md)

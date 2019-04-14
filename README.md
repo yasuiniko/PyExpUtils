@@ -4,7 +4,7 @@ Short for python experiment utilities.
 This is a collection of scripts and machine learning experiment management tools that I use whenever I have to use python.
 
 ## Table of Contents
-- [API Documentation](./wiki/api/api)
+- [API Documentation](./wiki/api/api.md)
 
 ## Structure
 I structure all of my machine learning experiments in the same way.
